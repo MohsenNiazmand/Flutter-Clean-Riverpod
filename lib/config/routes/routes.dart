@@ -1,0 +1,12 @@
+class Routes {
+  static const String splash = '/';
+  static const String home = '/home';
+  static const String login = '/login';
+  static const String forgotPassword = '/forgot-password';
+  static const String createPassword = '/create-password';
+  static const String register = '/register';
+  static const String emailConfirmation = '/email-confirmation';
+  static const String profile = '/profile';
+  static const String main = '/main';
+
+}

@@ -1,0 +1,73 @@
+{
+  "home": "Home",
+  "profile": "Profile",
+  "aboutUs": "About us",
+  "privacyPolicy": "Privacy policy",
+  "contactUs": "Contact us",
+  "logout": "Logout",
+
+  "updateProfileImage": "Update profile image",
+  "setProfileImage": "Set profile image",
+
+  "loginToAccount": "Login To Account",
+  "email": "Email",
+  "emailAddress": "Email Address",
+  "password": "Password",
+  "passwordHint": "Password must be at least 8 characters",
+  "passwordInvalid": "Password is not valid.",
+  "iForgotMyPassword": "I forgot my password!",
+  "login": "Login",
+  "doNotHaveAnAccount": "Don’t have an account?",
+  "register": "Register",
+  "byLoggingInYouAgreeToOur": "By logging in, you agree to our ",
+
+  "emailConfirmation": "Email confirmation",
+  "emailVerificationDescription": "We sent a 6-digit verification code to {email} email, Please enter the code",
+  "@emailVerificationDescription": {
+    "description": "interested email",
+    "placeholders": {
+      "email": {
+        "type": "String",
+        "example": "example@email.com"
+      }
+    }
+  },
+  "toResend": "to resend",
+  "incorrectCodePLeaseCheckAndReEnter": "Incorrect code. Please check and re-enter.",
+  "confirmCode": "Confirm code",
+  "didNotReceiveCode": "Did not receive the code?",
+  "resend": "Resend",
+
+  "createPassword": "Create a password",
+  "newPassword": "New password",
+  "repeatPassword": "Repeat password",
+  "confirmationToken": "Confirmation token",
+  "passwordsDoNotMatch": "Passwords do not match.",
+  "confirm": "Confirm",
+
+  "invalidCaptcha": "Invalid CAPTCHA. Please try again.",
+  "resetPassword": "Reset password",
+  "resetPasswordDescription": "Enter your email and we'll send you a link to get back into your account.",
+  "emailExample": "tnneu@gmail.com",
+
+  "firstName": "First Name",
+  "lastName": "Last Name",
+  "youShouldAcceptTermsToContinue": "You should accept terms to continue",
+  "captcha": "captcha",
+  "createAccount": "Create an account",
+  "confirmPassword": "Confirm password",
+  "acceptTermsAndConditions": "I accept the terms & conditions",
+  "continueText": "Continue",
+  "doYouHaveAnAccount": "Do you have an account?",
+
+  "errorWidgetText": "Something went wrong. Please try again.",
+  "isRequired": "is required",
+
+  "saturday": "SAT",
+  "sunday": "SUN",
+  "monday": "MON",
+  "tuesday": "TUE",
+  "wednesday": "WED",
+  "thursday": "THU",
+  "friday": "FRI"
+}
