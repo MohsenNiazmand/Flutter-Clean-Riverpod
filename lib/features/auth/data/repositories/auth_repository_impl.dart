@@ -27,8 +27,8 @@ class AuthRepositoryImpl extends AuthRepository {
       final body = {'email': email, 'password': password};
       final result = await _apiService.login(body);
       if (result.status == ResultTypeEnum.success.value) {
-        if (result.data?.postModel != null) {
-          await _databaseHelper.insertPost(result.data!.postModel!);
+        if (result.data?.noteModels?.isNotEmpty ?? false) {
+          await _databaseHelper.insertAllNotes(result.data?.noteModels ?? []);
         }
         return Right(result);
       } else {
@@ -85,8 +85,8 @@ class AuthRepositoryImpl extends AuthRepository {
       };
       final result = await _apiService.register(body);
       if (result.status == ResultTypeEnum.success.value) {
-        if (result.data?.postModel != null) {
-          await _databaseHelper.insertPost(result.data!.postModel!);
+        if (result.data?.noteModels?.isNotEmpty ?? false) {
+          await _databaseHelper.insertAllNotes(result.data?.noteModels ?? []);
         }
         return Right(result);
       } else {

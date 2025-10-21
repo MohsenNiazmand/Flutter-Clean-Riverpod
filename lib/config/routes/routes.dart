@@ -8,5 +8,6 @@ class Routes {
   static const String emailConfirmation = '/email-confirmation';
   static const String profile = '/profile';
   static const String main = '/main';
+  static const String addNote = '/addNote';
 
 }

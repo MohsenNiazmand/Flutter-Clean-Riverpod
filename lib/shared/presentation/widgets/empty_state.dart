@@ -1,8 +1,9 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_clean_riverpod/config/theme/app_styles.dart';
-import 'package:flutter_clean_riverpod/core/constants/assets.dart';
+import 'package:flutter_clean_riverpod/core/constants/colors.dart';
+import 'package:flutter_clean_riverpod/core/constants/dimensions.dart';
 import 'package:flutter_clean_riverpod/shared/presentation/widgets/primary_gap.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class EmptyState extends StatelessWidget {
   const EmptyState({super.key, this.text});
@@ -16,7 +17,7 @@ class EmptyState extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          SvgPicture.asset(Assets.icEmptyState),
+          Icon(Icons.edit_note_rounded,size: dimen120,color: cPrimary,),
           Gap.v16(),
           if (text != null)
             Text(

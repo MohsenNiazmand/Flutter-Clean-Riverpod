@@ -1,5 +1,8 @@
 import 'dart:math';
 
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_clean_riverpod/config/l10n/app_localization_helper.dart';
 import 'package:flutter_clean_riverpod/config/routes/routes.dart';
 import 'package:flutter_clean_riverpod/config/theme/app_styles.dart';
@@ -13,17 +16,10 @@ import 'package:flutter_clean_riverpod/data/local/secure_storage.dart';
 import 'package:flutter_clean_riverpod/features/main/presentation/main_screen_provider.dart';
 import 'package:flutter_clean_riverpod/features/main/presentation/widgets/navigation_button.dart';
 import 'package:flutter_clean_riverpod/shared/presentation/global_keys.dart';
-import 'package:flutter_clean_riverpod/shared/presentation/providers/post_provider.dart';
 import 'package:flutter_clean_riverpod/shared/presentation/widgets/primary_cached_image.dart';
-import 'package:flutter_clean_riverpod/shared/presentation/widgets/primary_circle.dart';
 import 'package:flutter_clean_riverpod/shared/presentation/widgets/primary_gap.dart';
-import 'package:flutter_clean_riverpod/shared/presentation/widgets/primary_rectangle.dart';
 import 'package:flutter_clean_riverpod/shared/presentation/widgets/secondary_drop_down_item.dart';
-import 'package:file_picker/file_picker.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 

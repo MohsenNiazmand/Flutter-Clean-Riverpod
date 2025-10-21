@@ -17,6 +17,7 @@ class PrimaryButton extends StatefulWidget {
     required this.text,
     super.key,
     this.borderRadius,
+    this.onLongPress,
     this.type = ButtonType.primary,
     this.suffixIcon,
     this.prefixIcon,
@@ -32,6 +33,7 @@ class PrimaryButton extends StatefulWidget {
 
   final String text;
   final void Function() onPress;
+  final void Function()? onLongPress;
   final double? width;
   final double? height;
   final Color? color;
@@ -56,6 +58,8 @@ class _PrimaryButtonState extends State<PrimaryButton> {
       height: widget.height,
       width: widget.width,
       child: ElevatedButton(
+        onLongPress:
+            (widget.enabled && !widget.loading) ? widget.onLongPress : null,
         onPressed: (widget.enabled && !widget.loading) ? widget.onPress : null,
         style: ElevatedButton.styleFrom(
           padding:

@@ -1,24 +1,23 @@
-
 import 'package:hive/hive.dart';
 
-part 'post_model.g.dart';
+part 'note_model.g.dart';
 
 @HiveType(typeId: 0)
-class PostModel {
-
-  PostModel({
+class NoteModel {
+  NoteModel({
     this.id,
     this.title,
     this.body,
   });
 
-  factory PostModel.fromJson(Map<String, dynamic> json) {
-    return PostModel(
+  factory NoteModel.fromJson(Map<String, dynamic> json) {
+    return NoteModel(
       id: json['id'] as int,
       title: json['title'] as String,
       body: json['body'] as String,
     );
   }
+
   @HiveField(0)
   final int? id;
   @HiveField(1)
@@ -32,5 +31,17 @@ class PostModel {
       'title': title,
       'body': body,
     };
+  }
+
+  NoteModel copyWith({
+    int? id,
+    String? title,
+    String? body,
+  }) {
+    return NoteModel(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      body: body ?? this.body,
+    );
   }
 }

@@ -15,6 +15,8 @@ class GlobalKeys {
   static final GlobalKey<FormBuilderState> captchaDialogFormKey =
   GlobalKey<FormBuilderState>();
 
+  static final GlobalKey<FormBuilderState> addNoteFormKey =
+  GlobalKey<FormBuilderState>();
 
   static final drawerKey = GlobalKey<ScaffoldState>();
   static final appbarProfileKey = GlobalKey();

@@ -23,6 +23,7 @@ class PrimaryRectangle extends StatelessWidget {
     this.customRadius,
     this.defaultShadow,
     this.boxConstraints,
+    this.onLongPress,
   });
 
   final Color color;
@@ -59,6 +60,9 @@ class PrimaryRectangle extends StatelessWidget {
 
   final void Function(TapDownDetails)? onTapDown;
 
+  final void Function()? onLongPress;
+
+
   final BorderRadiusGeometry? customRadius;
 
   final bool? defaultShadow;
@@ -69,6 +73,7 @@ class PrimaryRectangle extends StatelessWidget {
     onTap: onTap,
     onDoubleTap: onDoubleTap,
     onTapDown: onTapDown,
+    onLongPress: onLongPress,
     borderRadius: BorderRadius.circular(radius),
     child: Container(
       margin: margin,

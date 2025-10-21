@@ -12,7 +12,6 @@ import 'package:flutter_clean_riverpod/data/local/secure_storage.dart';
 import 'package:flutter_clean_riverpod/features/main/presentation/main_screen_provider.dart';
 import 'package:flutter_clean_riverpod/shared/domain/enums/enums.dart';
 import 'package:flutter_clean_riverpod/shared/presentation/global_keys.dart';
-import 'package:flutter_clean_riverpod/shared/presentation/providers/post_provider.dart';
 import 'package:flutter_clean_riverpod/shared/presentation/widgets/primary_cached_image.dart';
 import 'package:flutter_clean_riverpod/shared/presentation/widgets/primary_circle.dart';
 import 'package:flutter_clean_riverpod/shared/presentation/widgets/primary_gap.dart';
@@ -49,11 +48,6 @@ class DrawerWidget extends HookConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                FlutterLogo(
-                  style: FlutterLogoStyle.horizontal,
-                  textColor: Colors.blue,
-                  size: deviceType == DeviceTypeEnum.mobile ? 100 : null,
-                ),
                 _nameAndPicture(
                   context,
                   ref,

@@ -14,7 +14,6 @@ class Assets {
 
   static const String icEditProfile = '${iconsBasePath}edit_profile.svg';
 
-  static const String icEmptyState = '${iconsBasePath}empty_state.svg';
 
   static const String icApply = '${iconsBasePath}apply_icon.svg';
 

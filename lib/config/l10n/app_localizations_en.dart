@@ -174,4 +174,26 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get friday => 'FRI';
+
+  @override
+  String get title => 'Title';
+
+  @override
+  String get description => 'Description';
+
+  @override
+  String get save => 'Save';
+
+  @override
+  String get deleteNote => 'Delete Note';
+
+  @override
+  String get deleteNoteConfirmation =>
+      'Are you sure you want to delete this note?';
+
+  @override
+  String get cancel => 'Cancel';
+
+  @override
+  String get delete => 'Delete';
 }

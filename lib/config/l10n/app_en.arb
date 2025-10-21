@@ -69,5 +69,13 @@
   "tuesday": "TUE",
   "wednesday": "WED",
   "thursday": "THU",
-  "friday": "FRI"
+  "friday": "FRI",
+  "title":"Title",
+  "description":"Description",
+  "save":"Save",
+
+  "deleteNote": "Delete Note",
+  "deleteNoteConfirmation": "Are you sure you want to delete this note?",
+  "cancel": "Cancel",
+  "delete": "Delete"
 }

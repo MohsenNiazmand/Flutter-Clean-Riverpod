@@ -6,6 +6,7 @@ import 'package:flutter_clean_riverpod/features/auth/presentation/email_confirma
 import 'package:flutter_clean_riverpod/features/auth/presentation/forgot_password_screen.dart';
 import 'package:flutter_clean_riverpod/features/auth/presentation/login_screen.dart';
 import 'package:flutter_clean_riverpod/features/auth/presentation/register_screen.dart';
+import 'package:flutter_clean_riverpod/features/home/presentation/screens/addNoteScreen.dart';
 import 'package:flutter_clean_riverpod/features/home/presentation/screens/home_screen.dart';
 import 'package:flutter_clean_riverpod/features/main/presentation/main_screen.dart';
 import 'package:flutter/material.dart';
@@ -66,6 +67,10 @@ class AppRouter {
           _route(
             path: Routes.home,
             pageBuilder: (state) => const HomeScreen(),
+          ),
+          _route(
+            path: Routes.addNote,
+            pageBuilder: (state) => const AddNoteScreen(),
           ),
           _route(
             path: Routes.profile,

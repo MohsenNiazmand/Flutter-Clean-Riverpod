@@ -24,12 +24,12 @@ class _HomeApiService implements HomeApiService {
   final ParseErrorLogger? errorLogger;
 
   @override
-  Future<ApiResponse<dynamic>> fetchHomeData() async {
+  Future<ApiResponse<List<NoteModel>>> fetchHomeData() async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _options = _setStreamType<ApiResponse<dynamic>>(Options(
+    final _options = _setStreamType<ApiResponse<List<NoteModel>>>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
@@ -46,11 +46,16 @@ class _HomeApiService implements HomeApiService {
           baseUrl,
         )));
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late ApiResponse<dynamic> _value;
+    late ApiResponse<List<NoteModel>> _value;
     try {
-      _value = ApiResponse<dynamic>.fromJson(
+      _value = ApiResponse<List<NoteModel>>.fromJson(
         _result.data!,
-        (json) => json as dynamic,
+        (json) => json is List<dynamic>
+            ? json
+                .map<NoteModel>(
+                    (i) => NoteModel.fromJson(i as Map<String, dynamic>))
+                .toList()
+            : List.empty(),
       );
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);

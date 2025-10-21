@@ -1,25 +1,24 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'home_provider.dart';
+part of 'note_provider.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$homePHash() => r'74714c4439dec5f668fd68a0131326c037d78e96';
+String _$notesHash() => r'8618b15c97999f5e02670130c9d0f70ebf060ad7';
 
-/// See also [HomeP].
-@ProviderFor(HomeP)
-final homePProvider =
-    NotifierProvider<HomeP, DataState<ApiResponse<dynamic>>>.internal(
-  HomeP.new,
-  name: r'homePProvider',
+/// See also [Notes].
+@ProviderFor(Notes)
+final notesProvider = NotifierProvider<Notes, List<NoteModel>>.internal(
+  Notes.new,
+  name: r'notesProvider',
   debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$homePHash,
+      const bool.fromEnvironment('dart.vm.product') ? null : _$notesHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$HomeP = Notifier<DataState<ApiResponse<dynamic>>>;
+typedef _$Notes = Notifier<List<NoteModel>>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

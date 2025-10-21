@@ -1,4 +1,4 @@
-import 'package:flutter_clean_riverpod/shared/data/model/post_model.dart';
+import 'package:flutter_clean_riverpod/shared/data/model/note_model.dart';
 
 class AuthResponse {
   AuthResponse({
@@ -6,7 +6,7 @@ class AuthResponse {
     this.refreshToken,
     this.expiresIn,
     this.userId,
-    this.postModel,
+    this.noteModels,
   });
 
   factory AuthResponse.fromJson(Map<String, dynamic> json) {
@@ -15,9 +15,10 @@ class AuthResponse {
       refreshToken: json['refresh_token'] as String,
       expiresIn: json['expires_in'] as int,
       userId: json['user_id'] as String,
-      postModel: (json['postModel'] is Map<String, dynamic>? &&
-              json['postModel'] != null)
-          ? PostModel.fromJson(json['postModel'] as Map<String, dynamic>)
+      noteModels: json['noteModels'] != null
+          ? (json['noteModels'] as List)
+              .map((note) => NoteModel.fromJson(note as Map<String, dynamic>))
+              .toList()
           : null,
     );
   }
@@ -26,7 +27,7 @@ class AuthResponse {
   final String? refreshToken;
   final int? expiresIn;
   final String? userId;
-  final PostModel? postModel;
+  final List<NoteModel>? noteModels;
 
   Map<String, dynamic> toJson() {
     return {
@@ -34,7 +35,7 @@ class AuthResponse {
       'refresh_token': refreshToken,
       'expires_in': expiresIn,
       'user_id': userId,
-      'postModel': postModel,
+      'noteModels': noteModels?.map((note) => note.toJson()).toList(),
     };
   }
 }

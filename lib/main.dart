@@ -3,7 +3,7 @@ import 'package:flutter_clean_riverpod/core/constants/constants.dart';
 import 'package:flutter_clean_riverpod/core/constants/keys.dart';
 import 'package:flutter_clean_riverpod/core/injection_container.dart';
 import 'package:flutter_clean_riverpod/data/local/secure_storage.dart';
-import 'package:flutter_clean_riverpod/shared/data/model/post_model.dart';
+import 'package:flutter_clean_riverpod/shared/data/model/note_model.dart';
 import 'package:flutter_clean_riverpod/shared/presentation/my_app.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
@@ -18,7 +18,7 @@ void main() async {
   // Keep imperative navigation APIs in sync with the URL
   GoRouter.optionURLReflectsImperativeAPIs = true;
   await Hive.initFlutter();
-  Hive.registerAdapter(PostModelAdapter());
+  Hive.registerAdapter(NoteModelAdapter());
   AndroidOptions getAndroidOptions() => AndroidOptions.defaultOptions;
   await initializeDependencies(
     androidOptions: getAndroidOptions(),

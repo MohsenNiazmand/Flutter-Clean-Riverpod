@@ -13,11 +13,13 @@ import 'package:flutter_clean_riverpod/features/home/data/services/home_api_serv
 import 'package:flutter_clean_riverpod/features/home/domain/repository/home_repository.dart';
 import 'package:flutter_clean_riverpod/features/home/domain/usecase/fetch_home_use_case.dart';
 import 'package:flutter_clean_riverpod/shared/data/local/database_helper.dart';
-import 'package:flutter_clean_riverpod/shared/data/repository/post_repository_impl.dart';
-import 'package:flutter_clean_riverpod/shared/domain/repository/post_repository.dart';
-import 'package:flutter_clean_riverpod/shared/domain/usecase/post/delete_post_use_case.dart';
-import 'package:flutter_clean_riverpod/shared/domain/usecase/post/get_post_use_case.dart';
-import 'package:flutter_clean_riverpod/shared/domain/usecase/post/save_post_use_case.dart';
+import 'package:flutter_clean_riverpod/shared/data/repository/note_repository_impl.dart';
+import 'package:flutter_clean_riverpod/shared/domain/repository/note_repository.dart';
+import 'package:flutter_clean_riverpod/shared/domain/usecase/note/delete_note_use_case.dart';
+import 'package:flutter_clean_riverpod/shared/domain/usecase/note/get_note_use_case.dart';
+import 'package:flutter_clean_riverpod/shared/domain/usecase/note/insert_all_notes_use_case.dart';
+import 'package:flutter_clean_riverpod/shared/domain/usecase/note/save_note_use_case.dart';
+import 'package:flutter_clean_riverpod/shared/domain/usecase/note/update_note_use_case.dart';
 import 'package:curl_logger_dio_interceptor/curl_logger_dio_interceptor.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -62,7 +64,7 @@ Future<void> initializeDependencies({
 
     // Repositories
     ..registerSingleton<AuthRepository>(AuthRepositoryImpl(getIt(), getIt()))
-    ..registerSingleton<PostRepository>(PostRepositoryImpl(getIt()))
+    ..registerSingleton<NoteRepository>(NoteRepositoryImpl(getIt()))
     ..registerSingleton<HomeRepository>(HomeRepositoryImpl(getIt()))
 
     // Use cases
@@ -81,14 +83,26 @@ Future<void> initializeDependencies({
     ..registerLazySingleton<ResetPasswordUseCase>(
       () => ResetPasswordUseCase(getIt()),
     )
-    ..registerLazySingleton<SavePostUseCase>(
-      () => SavePostUseCase(getIt()),
+    ..registerLazySingleton<SaveNoteUseCase>(
+      () => SaveNoteUseCase(getIt()),
     )
-    ..registerLazySingleton<GetPostUseCase>(
-      () => GetPostUseCase(getIt()),
+    ..registerLazySingleton<GetNotesUseCase>(
+      () => GetNotesUseCase(getIt()),
     )
-    ..registerLazySingleton<DeletePostUseCase>(
-      () => DeletePostUseCase(getIt()),
+    ..registerLazySingleton<GetNoteByIdUseCase>(
+      () => GetNoteByIdUseCase(getIt()),
+    )
+    ..registerLazySingleton<DeleteNoteByIdUseCase>(
+      () => DeleteNoteByIdUseCase(getIt()),
+    )
+    ..registerLazySingleton<DeleteAllNotesUseCase>(
+      () => DeleteAllNotesUseCase(getIt()),
+    )
+    ..registerLazySingleton<UpdateNoteUseCase>(
+      () => UpdateNoteUseCase(getIt()),
+    )
+    ..registerLazySingleton<InsertAllNotesUseCase>(
+      () => InsertAllNotesUseCase(getIt()),
     )
     ..registerLazySingleton<FetchHomeUseCase>(
       () => FetchHomeUseCase(getIt()),

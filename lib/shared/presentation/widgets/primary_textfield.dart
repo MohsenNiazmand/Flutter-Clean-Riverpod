@@ -75,6 +75,10 @@ class PrimaryTextField extends StatefulWidget {
     this.radius,
     this.fillColor,
     this.requiredText,
+    this.filled,
+    this.isDense,
+    this.enabledBorder,
+    this.focusedBorder,
   });
 
   final String name;
@@ -140,6 +144,10 @@ class PrimaryTextField extends StatefulWidget {
   final double? radius;
   final Color? fillColor;
   final String? requiredText;
+  final bool? filled;
+  final bool? isDense;
+  final InputBorder? enabledBorder;
+  final InputBorder? focusedBorder;
 
   @override
   // ignore: library_private_types_in_public_api
@@ -187,8 +195,8 @@ class _PrimaryTextFieldState extends State<PrimaryTextField> {
                             .apply(color: cPPlaceHolder),
                     fillColor: widget.fillColor ?? cGrey,
                     focusColor: Theme.of(context).colorScheme.surface,
-                    filled: true,
-                    isDense: true,
+                    filled:widget.filled ?? true,
+                    isDense:widget.isDense ?? true,
                     suffixIconConstraints: const BoxConstraints(
                       maxWidth: dimen32,
                       maxHeight: dimen16,
@@ -200,10 +208,11 @@ class _PrimaryTextFieldState extends State<PrimaryTextField> {
                         ),
                     focusedBorder: widget.readOnly
                         ? FormConstants.defaultBorder(context, widget.radius)
-                        : FormConstants.focusBorder(context, widget.radius),
+                        : widget.focusedBorder ??
+                            FormConstants.focusBorder(context, widget.radius),
                     disabledBorder:
                         FormConstants.defaultBorder(context, widget.radius),
-                    enabledBorder:
+                    enabledBorder: widget.enabledBorder ??
                         FormConstants.defaultBorder(context, widget.radius),
                     errorBorder:
                         FormConstants.errorBorder(context, widget.radius),
