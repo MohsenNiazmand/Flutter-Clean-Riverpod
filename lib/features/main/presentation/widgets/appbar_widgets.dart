@@ -31,7 +31,7 @@ class AppbarWidgets extends HookConsumerWidget {
     final currentLocation = ref.watch(currentLocationProvider);
 
     final routes = [
-      Routes.home,
+      Routes.notes,
       Routes.profile,
     ];
 

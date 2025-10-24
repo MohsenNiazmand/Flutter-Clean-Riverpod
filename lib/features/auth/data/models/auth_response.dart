@@ -1,41 +1,26 @@
-import 'package:flutter_clean_riverpod/shared/data/model/note_model.dart';
+import 'package:flutter_clean_riverpod/shared/data/model/tokens.dart';
+import 'package:flutter_clean_riverpod/shared/data/model/user.dart';
 
 class AuthResponse {
+
   AuthResponse({
-    this.accessToken,
-    this.refreshToken,
-    this.expiresIn,
-    this.userId,
-    this.noteModels,
+    this.message,
+    this.user,
+    this.tokens,
   });
+  AuthResponse.fromJson(Map<String, dynamic> json)
+      : message = json['message'] as String?,
+        user = (json['user'] as Map<String, dynamic>?) != null
+            ? User.fromJson(json['user'] as Map<String, dynamic>)
+            : null,
+        tokens = (json['tokens'] as Map<String, dynamic>?) != null
+            ? Tokens.fromJson(json['tokens'] as Map<String, dynamic>)
+            : null;
 
-  factory AuthResponse.fromJson(Map<String, dynamic> json) {
-    return AuthResponse(
-      accessToken: json['access_token'] as String,
-      refreshToken: json['refresh_token'] as String,
-      expiresIn: json['expires_in'] as int,
-      userId: json['user_id'] as String,
-      noteModels: json['noteModels'] != null
-          ? (json['noteModels'] as List)
-              .map((note) => NoteModel.fromJson(note as Map<String, dynamic>))
-              .toList()
-          : null,
-    );
-  }
+  final String? message;
+  final User? user;
+  final Tokens? tokens;
 
-  final String? accessToken;
-  final String? refreshToken;
-  final int? expiresIn;
-  final String? userId;
-  final List<NoteModel>? noteModels;
-
-  Map<String, dynamic> toJson() {
-    return {
-      'access_token': accessToken,
-      'refresh_token': refreshToken,
-      'expires_in': expiresIn,
-      'user_id': userId,
-      'noteModels': noteModels?.map((note) => note.toJson()).toList(),
-    };
-  }
+  Map<String, dynamic> toJson() =>
+      {'message': message, 'user': user?.toJson(), 'tokens': tokens?.toJson()};
 }

@@ -16,7 +16,7 @@ class SplashScreen extends HookConsumerWidget {
         SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
 
           if (Constants.appToken!=null) {
-            context.go(Routes.home);
+            context.go(Routes.notes);
           } else {
             context.go(Routes.login);
           }

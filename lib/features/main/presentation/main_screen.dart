@@ -33,8 +33,8 @@ class MainScreen extends HookConsumerWidget {
       if (navigator.canPop()) {
         navigator.pop();
         return false;
-      } else if (currentLocation != Routes.home) {
-        context.go(Routes.home);
+      } else if (currentLocation != Routes.notes) {
+        context.go(Routes.notes);
         return false;
       } else {
         final DateTime now = DateTime.now();

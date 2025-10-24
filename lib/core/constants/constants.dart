@@ -1,5 +1,5 @@
 class Constants {
-  static const String baseUrl = 'https://www.sample.com/api';
+  static const String baseUrl = 'http://127.0.0.1:8000/api/';
   static String? appToken;
 
 

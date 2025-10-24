@@ -6,13 +6,15 @@ import 'package:flutter_clean_riverpod/data/local/secure_storage.dart';
 import 'package:flutter_clean_riverpod/domain/entities/data_state.dart';
 import 'package:flutter_clean_riverpod/features/auth/data/models/activation_code_response.dart';
 import 'package:flutter_clean_riverpod/features/auth/data/models/auth_response.dart';
+import 'package:flutter_clean_riverpod/features/auth/data/models/message_response.dart';
+import 'package:flutter_clean_riverpod/features/auth/data/models/reset_password_response.dart';
 import 'package:flutter_clean_riverpod/features/auth/domain/usecases/login_usecase.dart';
 import 'package:flutter_clean_riverpod/features/auth/domain/usecases/register_usecase.dart';
 import 'package:flutter_clean_riverpod/features/auth/domain/usecases/reset_password_usecase.dart';
 import 'package:flutter_clean_riverpod/features/auth/domain/usecases/send_activation_code_usecase.dart';
 import 'package:flutter_clean_riverpod/features/auth/domain/usecases/send_reset_password_email_usecase.dart';
-import 'package:flutter_clean_riverpod/shared/data/model/api_response.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:retrofit/retrofit.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'auth_provider.g.dart';
@@ -39,7 +41,7 @@ Future<bool> checkLogin() {
 @riverpod
 class LoginNotifier extends _$LoginNotifier {
   @override
-  DataState<ApiResponse<AuthResponse>> build() {
+  DataState<HttpResponse<AuthResponse>> build() {
     return const DataInitial();
   }
 
@@ -52,7 +54,7 @@ class LoginNotifier extends _$LoginNotifier {
       await response.fold((l) {
         state = DataFailed(l);
       }, (r) async {
-        await getIt<SecureStorage>().set(accessTokenKey, r.data?.accessToken);
+        await getIt<SecureStorage>().set(accessTokenKey, r.data.tokens?.access);
         state = DataSuccess(r);
       });
     } catch (e) {
@@ -65,7 +67,7 @@ class LoginNotifier extends _$LoginNotifier {
 @riverpod
 class Register extends _$Register {
   @override
-  DataState<ApiResponse<AuthResponse>> build() {
+  DataState<HttpResponse<AuthResponse>> build() {
     return const DataInitial();
   }
 
@@ -93,7 +95,7 @@ class Register extends _$Register {
       await response.fold((l) {
         state = DataFailed(l);
       }, (r) async {
-        await getIt<SecureStorage>().set(accessTokenKey, r.data?.accessToken);
+        await getIt<SecureStorage>().set(accessTokenKey, r.data.tokens?.access);
         state = DataSuccess(r);
       });
     } catch (e) {
@@ -106,7 +108,7 @@ class Register extends _$Register {
 @riverpod
 class SendActivationToken extends _$SendActivationToken {
   @override
-  DataState<ApiResponse<ActivationTokenResponse>> build() {
+  DataState<HttpResponse<ActivationTokenResponse>> build() {
     return const DataInitial();
   }
 
@@ -132,7 +134,7 @@ class SendActivationToken extends _$SendActivationToken {
 @riverpod
 class ReSendActivationToken extends _$ReSendActivationToken {
   @override
-  DataState<ApiResponse<ActivationTokenResponse>> build() {
+  DataState<HttpResponse<ActivationTokenResponse>> build() {
     return const DataInitial();
   }
 
@@ -158,7 +160,7 @@ class ReSendActivationToken extends _$ReSendActivationToken {
 @riverpod
 class SendResetPasswordEmail extends _$SendResetPasswordEmail {
   @override
-  DataState<ApiResponse<dynamic>> build() {
+  DataState<HttpResponse<ResetPasswordResponse>> build() {
     return const DataInitial();
   }
 
@@ -183,7 +185,7 @@ class SendResetPasswordEmail extends _$SendResetPasswordEmail {
 @riverpod
 class ResetPassword extends _$ResetPassword {
   @override
-  DataState<ApiResponse<dynamic>> build() {
+  DataState<HttpResponse<MessageResponse>> build() {
     return const DataInitial();
   }
 

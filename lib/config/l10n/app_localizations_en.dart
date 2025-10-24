@@ -196,4 +196,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get delete => 'Delete';
+
+  @override
+  String get passwordChangeSuccessfully => 'Password changed successfully.';
+
+  @override
+  String get passwordResetCodeSentPleaseCheckYourEmail =>
+      'Password reset code sent. Please check your email.';
 }

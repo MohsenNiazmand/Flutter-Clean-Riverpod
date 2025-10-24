@@ -8,7 +8,6 @@ import 'package:flutter_clean_riverpod/core/constants/dimensions.dart';
 import 'package:flutter_clean_riverpod/core/extensions/device_type_extension.dart';
 import 'package:flutter_clean_riverpod/domain/entities/data_state.dart';
 import 'package:flutter_clean_riverpod/features/auth/presentation/provider/auth_provider.dart';
-import 'package:flutter_clean_riverpod/shared/data/model/api_response.dart';
 import 'package:flutter_clean_riverpod/shared/domain/enums/enums.dart';
 import 'package:flutter_clean_riverpod/shared/presentation/captcha/captcha_widget.dart';
 import 'package:flutter_clean_riverpod/shared/presentation/global_keys.dart';
@@ -24,6 +23,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:retrofit/dio.dart';
 
 class ForgotPasswordScreen extends HookConsumerWidget {
   const ForgotPasswordScreen({super.key});
@@ -31,23 +31,23 @@ class ForgotPasswordScreen extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final deviceType = context.deviceType;
-    final loading = useState(false);
-        // ref.watch(sendResetPasswordEmailProvider).stateChecker ==
-        // StateCheckerEnum.loading;
+    final loading =
+        ref.watch(sendResetPasswordEmailProvider).stateChecker ==
+        StateCheckerEnum.loading;
     final isCaptchaValidate = useState(false);
 
-    // ref.listen<DataState<ApiResponse<dynamic>>>(
-    //   sendResetPasswordEmailProvider,
-    //   (previous, current) {
-    //     if (current is DataSuccess) {
-    //       PrimaryToast.show(
-    //         context.tr.passwordResetCodeSentPleaseCheckYourEmail,
-    //         type: ToastTypeEnum.success,
-    //       );
-    //       context.push(Routes.createPassword);
-    //     }
-    //   },
-    // );
+    ref.listen<DataState<HttpResponse<dynamic>>>(
+      sendResetPasswordEmailProvider,
+      (previous, current) {
+        if (current is DataSuccess) {
+          PrimaryToast.show(
+            context.tr.passwordResetCodeSentPleaseCheckYourEmail,
+            type: ToastTypeEnum.success,
+          );
+          context.push(Routes.createPassword);
+        }
+      },
+    );
 
     Future<void> submit() async {
       if (GlobalKeys.forgotPasswordFormKey.currentState?.saveAndValidate() ??
@@ -66,22 +66,16 @@ class ForgotPasswordScreen extends HookConsumerWidget {
         ref.read(resetEmailProvider.notifier).state = email;
 
 
-        // unawaited(ref
-        //     .read(sendResetPasswordEmailProvider.notifier)
-        //     .sendResetPasswordEmail(email));
+        unawaited(ref
+            .read(sendResetPasswordEmailProvider.notifier)
+            .sendResetPasswordEmail(email));
 
-        loading.value = true;
-        Future.delayed(Durations.extralong4, () {
-          loading.value = false;
-          if (context.mounted) {
-            context.go(Routes.createPassword);
-          }
-        });
+
       }
     }
 
     return CustomPage(
-      loading: loading.value,
+      loading: loading,
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: dimen32),
@@ -146,7 +140,7 @@ class ForgotPasswordScreen extends HookConsumerWidget {
                           }),
                       Gap.v32(),
                       PrimaryButton(
-                        loading: loading.value,
+                        loading: loading,
                         onPress: submit,
                         text: context.tr.confirm,
                         width: MediaQuery.sizeOf(context).width,

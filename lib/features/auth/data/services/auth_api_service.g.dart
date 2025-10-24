@@ -14,7 +14,7 @@ class _AuthApiService implements AuthApiService {
     this.baseUrl,
     this.errorLogger,
   }) {
-    baseUrl ??= 'https://www.sample.com/api';
+    baseUrl ??= 'http://localhost:8001/api/';
   }
 
   final Dio _dio;
@@ -24,20 +24,20 @@ class _AuthApiService implements AuthApiService {
   final ParseErrorLogger? errorLogger;
 
   @override
-  Future<ApiResponse<AuthResponse>> login(Map<String, dynamic> body) async {
+  Future<HttpResponse<AuthResponse>> login(Map<String, dynamic> body) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     _data.addAll(body);
-    final _options = _setStreamType<ApiResponse<AuthResponse>>(Options(
+    final _options = _setStreamType<HttpResponse<AuthResponse>>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
     )
         .compose(
           _dio.options,
-          '/login',
+          'users/login/',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -47,21 +47,19 @@ class _AuthApiService implements AuthApiService {
           baseUrl,
         )));
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late ApiResponse<AuthResponse> _value;
+    late AuthResponse _value;
     try {
-      _value = ApiResponse<AuthResponse>.fromJson(
-        _result.data!,
-        (json) => AuthResponse.fromJson(json as Map<String, dynamic>),
-      );
+      _value = AuthResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
       rethrow;
     }
-    return _value;
+    final httpResponse = HttpResponse(_value, _result);
+    return httpResponse;
   }
 
   @override
-  Future<ApiResponse<ActivationTokenResponse>> sendActivationToken(
+  Future<HttpResponse<ActivationTokenResponse>> sendActivationToken(
       Map<String, dynamic> body) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -69,14 +67,14 @@ class _AuthApiService implements AuthApiService {
     final _data = <String, dynamic>{};
     _data.addAll(body);
     final _options =
-        _setStreamType<ApiResponse<ActivationTokenResponse>>(Options(
+        _setStreamType<HttpResponse<ActivationTokenResponse>>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
     )
             .compose(
               _dio.options,
-              '/send/activation/token',
+              'users/send-activation-code/',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -86,35 +84,32 @@ class _AuthApiService implements AuthApiService {
               baseUrl,
             )));
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late ApiResponse<ActivationTokenResponse> _value;
+    late ActivationTokenResponse _value;
     try {
-      _value = ApiResponse<ActivationTokenResponse>.fromJson(
-        _result.data!,
-        (json) =>
-            ActivationTokenResponse.fromJson(json as Map<String, dynamic>),
-      );
+      _value = ActivationTokenResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
       rethrow;
     }
-    return _value;
+    final httpResponse = HttpResponse(_value, _result);
+    return httpResponse;
   }
 
   @override
-  Future<ApiResponse<AuthResponse>> register(Map<String, dynamic> body) async {
+  Future<HttpResponse<AuthResponse>> register(Map<String, dynamic> body) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     _data.addAll(body);
-    final _options = _setStreamType<ApiResponse<AuthResponse>>(Options(
+    final _options = _setStreamType<HttpResponse<AuthResponse>>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
     )
         .compose(
           _dio.options,
-          '/register',
+          'users/register-with-activation/',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -124,72 +119,70 @@ class _AuthApiService implements AuthApiService {
           baseUrl,
         )));
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late ApiResponse<AuthResponse> _value;
+    late AuthResponse _value;
     try {
-      _value = ApiResponse<AuthResponse>.fromJson(
-        _result.data!,
-        (json) => AuthResponse.fromJson(json as Map<String, dynamic>),
-      );
+      _value = AuthResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
       rethrow;
     }
-    return _value;
+    final httpResponse = HttpResponse(_value, _result);
+    return httpResponse;
   }
 
   @override
-  Future<ApiResponse<dynamic>> sendResetPasswordEmail(
+  Future<HttpResponse<ResetPasswordResponse>> sendResetPasswordEmail(
       Map<String, dynamic> body) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     _data.addAll(body);
-    final _options = _setStreamType<ApiResponse<dynamic>>(Options(
+    final _options =
+        _setStreamType<HttpResponse<ResetPasswordResponse>>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
     )
-        .compose(
-          _dio.options,
-          '/send/reset/pass/email',
-          queryParameters: queryParameters,
-          data: _data,
-        )
-        .copyWith(
-            baseUrl: _combineBaseUrls(
-          _dio.options.baseUrl,
-          baseUrl,
-        )));
+            .compose(
+              _dio.options,
+              'users/send-reset-password-email/',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            )));
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late ApiResponse<dynamic> _value;
+    late ResetPasswordResponse _value;
     try {
-      _value = ApiResponse<dynamic>.fromJson(
-        _result.data!,
-        (json) => json as dynamic,
-      );
+      _value = ResetPasswordResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
       rethrow;
     }
-    return _value;
+    final httpResponse = HttpResponse(_value, _result);
+    return httpResponse;
   }
 
   @override
-  Future<ApiResponse<dynamic>> resetPassword(Map<String, dynamic> body) async {
+  Future<HttpResponse<MessageResponse>> resetPassword(
+      Map<String, dynamic> body) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     _data.addAll(body);
-    final _options = _setStreamType<ApiResponse<dynamic>>(Options(
+    final _options = _setStreamType<HttpResponse<MessageResponse>>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
     )
         .compose(
           _dio.options,
-          '/reset/pass',
+          'users/reset-password/',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -199,17 +192,15 @@ class _AuthApiService implements AuthApiService {
           baseUrl,
         )));
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late ApiResponse<dynamic> _value;
+    late MessageResponse _value;
     try {
-      _value = ApiResponse<dynamic>.fromJson(
-        _result.data!,
-        (json) => json as dynamic,
-      );
+      _value = MessageResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
       rethrow;
     }
-    return _value;
+    final httpResponse = HttpResponse(_value, _result);
+    return httpResponse;
   }
 
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {

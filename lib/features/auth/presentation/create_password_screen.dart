@@ -1,3 +1,4 @@
+
 import 'package:flutter_clean_riverpod/config/l10n/app_localization_helper.dart';
 import 'package:flutter_clean_riverpod/config/routes/routes.dart';
 import 'package:flutter_clean_riverpod/config/theme/app_styles.dart';
@@ -6,8 +7,8 @@ import 'package:flutter_clean_riverpod/core/constants/dimensions.dart';
 import 'package:flutter_clean_riverpod/core/extensions/device_type_extension.dart';
 import 'package:flutter_clean_riverpod/core/utils/form_validators.dart';
 import 'package:flutter_clean_riverpod/domain/entities/data_state.dart';
+import 'package:flutter_clean_riverpod/features/auth/data/models/message_response.dart';
 import 'package:flutter_clean_riverpod/features/auth/presentation/provider/auth_provider.dart';
-import 'package:flutter_clean_riverpod/shared/data/model/api_response.dart';
 import 'package:flutter_clean_riverpod/shared/domain/enums/enums.dart';
 import 'package:flutter_clean_riverpod/shared/presentation/global_keys.dart';
 import 'package:flutter_clean_riverpod/shared/presentation/screens/custom_page.dart';
@@ -22,6 +23,7 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:retrofit/dio.dart';
 
 class CreatePasswordScreen extends HookConsumerWidget {
   const CreatePasswordScreen({super.key});
@@ -33,25 +35,26 @@ class CreatePasswordScreen extends HookConsumerWidget {
     final codeController = useTextEditingController();
     final deviceType = context.deviceType;
 
-    final loading = useState(false);
-        // ref.watch(resetPasswordProvider).stateChecker ==
-        // StateCheckerEnum.loading;
+    final loading =
+        ref.watch(resetPasswordProvider).stateChecker ==
+        StateCheckerEnum.loading;
 
-    // ref.listen<DataState<ApiResponse<dynamic>>>(
-    //   resetPasswordProvider,
-    //   (previous, current) {
-    //     if (current is DataSuccess) {
-    //       PrimaryToast.show(
-    //         context.tr.passwordChangeSuccessfully,
-    //         type: ToastTypeEnum.success,
-    //       );
-    //       context.go(Routes.login);
-    //     }
-    //   },
-    // );
+    ref.listen<DataState<HttpResponse<MessageResponse>>>(
+      resetPasswordProvider,
+      (previous, current) {
+        if (current is DataSuccess) {
+          PrimaryToast.show(
+            context.tr.passwordChangeSuccessfully,
+            type: ToastTypeEnum.success,
+          );
+          context.go(Routes.login);
+        }
+      },
+    );
+
 
     return CustomPage(
-      loading: loading.value,
+      loading: loading,
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: dimen32),
@@ -137,7 +140,7 @@ class CreatePasswordScreen extends HookConsumerWidget {
                       ),
                       Gap.v32(),
                       PrimaryButton(
-                        loading: loading.value,
+                        loading: loading,
                         onPress: () {
                           if (GlobalKeys.createPasswordFormKey.currentState
                                   ?.saveAndValidate() ??
@@ -151,28 +154,21 @@ class CreatePasswordScreen extends HookConsumerWidget {
                               FocusScope.of(context).unfocus();
 
 
-                              loading.value = true;
-                              Future.delayed(Durations.extralong4, () {
-                                loading.value = false;
-                                if (context.mounted) {
-                                  context.go(Routes.login);
-                                }
-                              });
 
-                              // ref
-                              //     .read(resetPasswordProvider.notifier)
-                              //     .resetPassword(
-                              //       email: ref
-                              //               .read(
-                              //                 resetEmailProvider.notifier,
-                              //               )
-                              //               .state ??
-                              //           '',
-                              //       resetToken: codeController.text,
-                              //       password: passwordController.text,
-                              //       passwordConfirmation:
-                              //           repeatPasswordController.text,
-                              //     );
+                              ref
+                                  .read(resetPasswordProvider.notifier)
+                                  .resetPassword(
+                                    email: ref
+                                            .read(
+                                              resetEmailProvider.notifier,
+                                            )
+                                            .state ??
+                                        '',
+                                    resetToken: codeController.text,
+                                    password: passwordController.text,
+                                    passwordConfirmation:
+                                        repeatPasswordController.text,
+                                  );
                             } else {
                               PrimaryToast.show(
                                 context.tr.passwordsDoNotMatch,

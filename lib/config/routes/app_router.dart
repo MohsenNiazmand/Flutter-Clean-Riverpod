@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_clean_riverpod/config/routes/routes.dart';
 import 'package:flutter_clean_riverpod/config/routes/transitions.dart';
 import 'package:flutter_clean_riverpod/config/theme/app_styles.dart';
@@ -6,10 +7,9 @@ import 'package:flutter_clean_riverpod/features/auth/presentation/email_confirma
 import 'package:flutter_clean_riverpod/features/auth/presentation/forgot_password_screen.dart';
 import 'package:flutter_clean_riverpod/features/auth/presentation/login_screen.dart';
 import 'package:flutter_clean_riverpod/features/auth/presentation/register_screen.dart';
-import 'package:flutter_clean_riverpod/features/home/presentation/screens/addNoteScreen.dart';
-import 'package:flutter_clean_riverpod/features/home/presentation/screens/home_screen.dart';
 import 'package:flutter_clean_riverpod/features/main/presentation/main_screen.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter_clean_riverpod/features/notes/presentation/screens/addNoteScreen.dart';
+import 'package:flutter_clean_riverpod/features/notes/presentation/screens/notes_screen.dart';
 import 'package:flutter_clean_riverpod/features/profile/presentation/profile_screen.dart';
 import 'package:flutter_clean_riverpod/features/splash/presentation/splash_screen.dart';
 import 'package:go_router/go_router.dart';
@@ -65,8 +65,8 @@ class AppRouter {
         },
         routes: <RouteBase>[
           _route(
-            path: Routes.home,
-            pageBuilder: (state) => const HomeScreen(),
+            path: Routes.notes,
+            pageBuilder: (state) => const NotesScreen(),
           ),
           _route(
             path: Routes.addNote,

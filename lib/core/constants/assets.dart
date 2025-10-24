@@ -4,7 +4,7 @@ class Assets {
 
 
 
-  static const String icHome = '${iconsBasePath}home.svg';
+  static const String icHome = '${iconsBasePath}notes.svg';
   static const String icSave = '${iconsBasePath}save.svg';
   static const String icProfile = '${iconsBasePath}user.svg';
   static const String icLogout = '${iconsBasePath}logout.svg';

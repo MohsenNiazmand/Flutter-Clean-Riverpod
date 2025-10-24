@@ -1,3 +1,6 @@
+import 'package:curl_logger_dio_interceptor/curl_logger_dio_interceptor.dart';
+import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_clean_riverpod/config/api/interceptor.dart';
 import 'package:flutter_clean_riverpod/data/local/secure_storage.dart';
 import 'package:flutter_clean_riverpod/features/auth/data/repositories/auth_repository_impl.dart';
@@ -8,21 +11,21 @@ import 'package:flutter_clean_riverpod/features/auth/domain/usecases/register_us
 import 'package:flutter_clean_riverpod/features/auth/domain/usecases/reset_password_usecase.dart';
 import 'package:flutter_clean_riverpod/features/auth/domain/usecases/send_activation_code_usecase.dart';
 import 'package:flutter_clean_riverpod/features/auth/domain/usecases/send_reset_password_email_usecase.dart';
-import 'package:flutter_clean_riverpod/features/home/data/repository/home_repository_impl.dart';
-import 'package:flutter_clean_riverpod/features/home/data/services/home_api_service.dart';
-import 'package:flutter_clean_riverpod/features/home/domain/repository/home_repository.dart';
-import 'package:flutter_clean_riverpod/features/home/domain/usecase/fetch_home_use_case.dart';
+import 'package:flutter_clean_riverpod/features/notes/data/repository/note_local_repository_impl.dart';
+import 'package:flutter_clean_riverpod/features/notes/data/repository/notes_remote_repository_impl.dart';
+import 'package:flutter_clean_riverpod/features/notes/data/services/notes_api_service.dart';
+import 'package:flutter_clean_riverpod/features/notes/domain/repository/note_local_repository.dart';
+import 'package:flutter_clean_riverpod/features/notes/domain/repository/notes_remote_repository.dart';
+import 'package:flutter_clean_riverpod/features/notes/domain/usecase/local/create_local_note_use_case.dart';
+import 'package:flutter_clean_riverpod/features/notes/domain/usecase/local/delete_local_note_use_case.dart';
+import 'package:flutter_clean_riverpod/features/notes/domain/usecase/local/get_local_note_use_case.dart';
+import 'package:flutter_clean_riverpod/features/notes/domain/usecase/local/insert_all_local_notes_use_case.dart';
+import 'package:flutter_clean_riverpod/features/notes/domain/usecase/local/update_local_note_use_case.dart';
+import 'package:flutter_clean_riverpod/features/notes/domain/usecase/remote/create_note_use_case.dart';
+import 'package:flutter_clean_riverpod/features/notes/domain/usecase/remote/delete_note_use_case.dart';
+import 'package:flutter_clean_riverpod/features/notes/domain/usecase/remote/fetch_notes_use_case.dart';
+import 'package:flutter_clean_riverpod/features/notes/domain/usecase/remote/update_note_use_case.dart';
 import 'package:flutter_clean_riverpod/shared/data/local/database_helper.dart';
-import 'package:flutter_clean_riverpod/shared/data/repository/note_repository_impl.dart';
-import 'package:flutter_clean_riverpod/shared/domain/repository/note_repository.dart';
-import 'package:flutter_clean_riverpod/shared/domain/usecase/note/delete_note_use_case.dart';
-import 'package:flutter_clean_riverpod/shared/domain/usecase/note/get_note_use_case.dart';
-import 'package:flutter_clean_riverpod/shared/domain/usecase/note/insert_all_notes_use_case.dart';
-import 'package:flutter_clean_riverpod/shared/domain/usecase/note/save_note_use_case.dart';
-import 'package:flutter_clean_riverpod/shared/domain/usecase/note/update_note_use_case.dart';
-import 'package:curl_logger_dio_interceptor/curl_logger_dio_interceptor.dart';
-import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
 
@@ -58,14 +61,14 @@ Future<void> initializeDependencies({
     ..registerLazySingleton<AuthApiService>(
       () => AuthApiService(getIt()),
     )
-    ..registerLazySingleton<HomeApiService>(
-      () => HomeApiService(getIt()),
+    ..registerLazySingleton<NotesApiService>(
+      () => NotesApiService(getIt()),
     )
 
     // Repositories
-    ..registerSingleton<AuthRepository>(AuthRepositoryImpl(getIt(), getIt()))
-    ..registerSingleton<NoteRepository>(NoteRepositoryImpl(getIt()))
-    ..registerSingleton<HomeRepository>(HomeRepositoryImpl(getIt()))
+    ..registerSingleton<AuthRepository>(AuthRepositoryImpl(getIt()))
+    ..registerSingleton<NoteLocalRepository>(NoteLocalRepositoryImpl(getIt()))
+    ..registerSingleton<NotesRepository>(NotesRepositoryImpl(getIt(), getIt()))
 
     // Use cases
     ..registerLazySingleton<LoginUseCase>(
@@ -83,28 +86,35 @@ Future<void> initializeDependencies({
     ..registerLazySingleton<ResetPasswordUseCase>(
       () => ResetPasswordUseCase(getIt()),
     )
-    ..registerLazySingleton<SaveNoteUseCase>(
-      () => SaveNoteUseCase(getIt()),
+    ..registerLazySingleton<FetchNotesUseCase>(
+      () => FetchNotesUseCase(getIt()),
     )
-    ..registerLazySingleton<GetNotesUseCase>(
-      () => GetNotesUseCase(getIt()),
-    )
-    ..registerLazySingleton<GetNoteByIdUseCase>(
-      () => GetNoteByIdUseCase(getIt()),
-    )
-    ..registerLazySingleton<DeleteNoteByIdUseCase>(
-      () => DeleteNoteByIdUseCase(getIt()),
-    )
-    ..registerLazySingleton<DeleteAllNotesUseCase>(
-      () => DeleteAllNotesUseCase(getIt()),
+    ..registerLazySingleton<CreateNoteUseCase>(
+      () => CreateNoteUseCase(getIt()),
     )
     ..registerLazySingleton<UpdateNoteUseCase>(
       () => UpdateNoteUseCase(getIt()),
     )
-    ..registerLazySingleton<InsertAllNotesUseCase>(
-      () => InsertAllNotesUseCase(getIt()),
+    ..registerLazySingleton<DeleteNoteUseCase>(
+      () => DeleteNoteUseCase(getIt()),
     )
-    ..registerLazySingleton<FetchHomeUseCase>(
-      () => FetchHomeUseCase(getIt()),
-    );
+    ..registerLazySingleton<CreateLocalNoteUseCase>(
+      () => CreateLocalNoteUseCase(getIt()),
+    )
+    ..registerLazySingleton<DeleteLocalNoteByIdUseCase>(
+      () => DeleteLocalNoteByIdUseCase(getIt()),
+    )
+    ..registerLazySingleton<GetLocalNotesUseCase>(
+      () => GetLocalNotesUseCase(getIt()),
+    )
+    ..registerLazySingleton<InsertAllLocalNotesUseCase>(
+      () => InsertAllLocalNotesUseCase(getIt()),
+    )
+    ..registerLazySingleton<UpdateLocalNoteUseCase>(
+      () => UpdateLocalNoteUseCase(getIt()),
+    )
+    ..registerLazySingleton<DeleteAllNotesUseCase>(
+          () => DeleteAllNotesUseCase(getIt()),
+    )
+  ;
 }

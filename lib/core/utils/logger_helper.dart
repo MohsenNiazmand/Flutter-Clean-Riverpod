@@ -49,16 +49,16 @@ void printRequest(RequestOptions options) {
 }
 
 void printOnResponse(Response<dynamic> response) {
-  // LoggerHelper.logger.i(
-  //   {
-  //     'response': {
-  //       'method': response.requestOptions.method,
-  //       'path': response.requestOptions.path,
-  //       'data': response.data,
-  //       'statusCode': response.statusCode
-  //     }
-  //   },
-  // );
+  LoggerHelper.logger.i(
+    {
+      'response': {
+        'method': response.requestOptions.method,
+        'path': response.requestOptions.path,
+        'data': response.data,
+        'statusCode': response.statusCode
+      }
+    },
+  );
 }
 
 void onErrorPrint(DioException error) {

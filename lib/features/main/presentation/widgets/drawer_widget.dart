@@ -67,8 +67,8 @@ class DrawerWidget extends HookConsumerWidget {
                   GlobalKeys.drawerKey.currentState?.closeDrawer();
                   if (context.mounted) {
                     ref.read(currentLocationProvider.notifier).state =
-                        Routes.home;
-                    context.go(Routes.home);
+                        Routes.notes;
+                    context.go(Routes.notes);
                   }
                 }),
                 drawerItem(context.tr.profile, Assets.icProfile, () {

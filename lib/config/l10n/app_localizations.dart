@@ -459,6 +459,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Delete'**
   String get delete;
+
+  /// No description provided for @passwordChangeSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Password changed successfully.'**
+  String get passwordChangeSuccessfully;
+
+  /// No description provided for @passwordResetCodeSentPleaseCheckYourEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Password reset code sent. Please check your email.'**
+  String get passwordResetCodeSentPleaseCheckYourEmail;
 }
 
 class _AppLocalizationsDelegate

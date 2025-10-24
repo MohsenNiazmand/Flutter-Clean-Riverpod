@@ -1,17 +1,14 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_clean_riverpod/config/l10n/app_localization_helper.dart';
 import 'package:flutter_clean_riverpod/config/routes/routes.dart';
 import 'package:flutter_clean_riverpod/config/theme/app_styles.dart';
 import 'package:flutter_clean_riverpod/core/constants/colors.dart';
 import 'package:flutter_clean_riverpod/core/constants/dimensions.dart';
-import 'package:flutter_clean_riverpod/core/constants/keys.dart';
 import 'package:flutter_clean_riverpod/core/extensions/device_type_extension.dart';
-import 'package:flutter_clean_riverpod/core/injection_container.dart';
-import 'package:flutter_clean_riverpod/data/local/secure_storage.dart';
 import 'package:flutter_clean_riverpod/domain/entities/data_state.dart';
 import 'package:flutter_clean_riverpod/features/auth/data/models/activation_code_response.dart';
 import 'package:flutter_clean_riverpod/features/auth/data/models/auth_response.dart';
 import 'package:flutter_clean_riverpod/features/auth/presentation/provider/auth_provider.dart';
-import 'package:flutter_clean_riverpod/shared/data/model/api_response.dart';
 import 'package:flutter_clean_riverpod/shared/domain/enums/enums.dart';
 import 'package:flutter_clean_riverpod/shared/presentation/global_keys.dart';
 import 'package:flutter_clean_riverpod/shared/presentation/screens/custom_page.dart';
@@ -21,10 +18,10 @@ import 'package:flutter_clean_riverpod/shared/presentation/widgets/primary_gap.d
 import 'package:flutter_clean_riverpod/shared/presentation/widgets/primary_pin_put.dart';
 import 'package:flutter_clean_riverpod/shared/presentation/widgets/primary_rectangle.dart';
 import 'package:flutter_clean_riverpod/shared/presentation/widgets/primary_toast.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:retrofit/dio.dart';
 
 class EmailConfirmationScreen extends HookConsumerWidget {
   const EmailConfirmationScreen({super.key});
@@ -47,34 +44,34 @@ class EmailConfirmationScreen extends HookConsumerWidget {
       },
     );
 
-    final loading = useState(false);
-    // ref.watch(registerProvider).stateChecker == StateCheckerEnum.loading;
+    final loading =
+        ref.watch(registerProvider).stateChecker == StateCheckerEnum.loading;
 
-    final resendLoading = useState(false);
-    // ref.watch(reSendActivationTokenProvider).stateChecker ==
-    //     StateCheckerEnum.loading;
+    final resendLoading =
+        ref.watch(reSendActivationTokenProvider).stateChecker ==
+            StateCheckerEnum.loading;
 
-
-    // ref..listen<DataState<ApiResponse<AuthResponse?>>>(
-    //   registerProvider,
-    //       (previous, current) {
-    //     if (current is DataSuccess) {
-    //       clearRegisterFields(ref);
-    //       context.go(Routes.home);
-    //     }
-    //   },
-    // )
-    // ..listen<DataState<ApiResponse<ActivationTokenResponse?>>>(
-    //   reSendActivationTokenProvider,
-    //   (previous, current) {
-    //     if (current is DataSuccess) {
-    //       ref.read(remainingTimeProvider.notifier).state = 120;
-    //     }
-    //   },
-    // );
+    ref
+      ..listen<DataState<HttpResponse<AuthResponse?>>>(
+        registerProvider,
+        (previous, current) {
+          if (current is DataSuccess) {
+            clearRegisterFields(ref);
+            context.go(Routes.notes);
+          }
+        },
+      )
+      ..listen<DataState<HttpResponse<ActivationTokenResponse?>>>(
+        reSendActivationTokenProvider,
+        (previous, current) {
+          if (current is DataSuccess) {
+            ref.read(remainingTimeProvider.notifier).state = 120;
+          }
+        },
+      );
     final interestedEmail = ref.watch(emailRProvider);
     return CustomPage(
-      loading: loading.value || resendLoading.value,
+      loading: loading || resendLoading,
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: dimen32),
@@ -150,19 +147,9 @@ class EmailConfirmationScreen extends HookConsumerWidget {
                               context.tr.incorrectCodePLeaseCheckAndReEnter,
                             );
                           } else {
-                            //In reality we use this, but now we simulate real process.
-                            // ref
-                            //     .read(registerProvider.notifier)
-                            //     .register(codeController.text);
-
-                            loading.value = true;
-                            Future.delayed(Durations.extralong4, () async {
-                              loading.value = false;
-                                await getIt<SecureStorage>().set(accessTokenKey, 'TestToken');
-                              if (context.mounted) {
-                                context.go(Routes.home);
-                              }
-                            });
+                            ref
+                                .read(registerProvider.notifier)
+                                .register(codeController.text);
                           }
                         },
                         text: context.tr.confirmCode,
@@ -183,20 +170,11 @@ class EmailConfirmationScreen extends HookConsumerWidget {
                             final remainedTime =
                                 ref.read(remainingTimeProvider.notifier).state;
                             if (remainedTime == 0) {
-                              //In reality we use this, but now we simulate real process.
-
-                              // ref
-                              //     .read(
-                              //       reSendActivationTokenProvider.notifier,
-                              //     )
-                              //     .sendActivationToken();
-
-                              resendLoading.value = true;
-                              Future.delayed(Durations.extralong4, () {
-                                resendLoading.value = false;
-                                ref.read(remainingTimeProvider.notifier).state =
-                                    120;
-                              });
+                              ref
+                                  .read(
+                                    reSendActivationTokenProvider.notifier,
+                                  )
+                                  .sendActivationToken();
                             }
                           },
                           child: Text(

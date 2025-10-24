@@ -1,38 +1,34 @@
+import 'package:dartz/dartz.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter_clean_riverpod/core/error/exception_handler.dart';
 import 'package:flutter_clean_riverpod/features/auth/data/models/activation_code_response.dart';
 import 'package:flutter_clean_riverpod/features/auth/data/models/auth_response.dart';
+import 'package:flutter_clean_riverpod/features/auth/data/models/message_response.dart';
+import 'package:flutter_clean_riverpod/features/auth/data/models/reset_password_response.dart';
 import 'package:flutter_clean_riverpod/features/auth/data/services/auth_api_service.dart';
 import 'package:flutter_clean_riverpod/features/auth/domain/repository/auth_repository.dart';
-import 'package:flutter_clean_riverpod/shared/data/local/database_helper.dart';
-import 'package:flutter_clean_riverpod/shared/data/model/api_response.dart';
-import 'package:flutter_clean_riverpod/shared/domain/enums/enums.dart';
-import 'package:dartz/dartz.dart';
-import 'package:dio/dio.dart';
+import 'package:retrofit/dio.dart';
 
 class AuthRepositoryImpl extends AuthRepository {
   AuthRepositoryImpl(
     this._apiService,
-    this._databaseHelper,
   );
 
   final AuthApiService _apiService;
-  final DatabaseHelper _databaseHelper;
 
   @override
-  Future<Either<ExceptionHandler, ApiResponse<AuthResponse>>> login({
+  Future<Either<ExceptionHandler, HttpResponse<AuthResponse>>> login({
     required String email,
     required String password,
   }) async {
     try {
       final body = {'email': email, 'password': password};
       final result = await _apiService.login(body);
-      if (result.status == ResultTypeEnum.success.value) {
-        if (result.data?.noteModels?.isNotEmpty ?? false) {
-          await _databaseHelper.insertAllNotes(result.data?.noteModels ?? []);
-        }
+      if (result.response.statusCode == 200) {
+
         return Right(result);
       } else {
-        final errorMessage = result.message;
+        final errorMessage = result.response.data['detail'] as String;
         final exceptionHandler = ExceptionHandler(
           messageException: errorMessage,
         );
@@ -44,17 +40,17 @@ class AuthRepositoryImpl extends AuthRepository {
   }
 
   @override
-  Future<Either<ExceptionHandler, ApiResponse<ActivationTokenResponse>>>
+  Future<Either<ExceptionHandler, HttpResponse<ActivationTokenResponse>>>
       sendActivationToken({
     required String email,
   }) async {
     try {
       final body = {'email': email};
       final result = await _apiService.sendActivationToken(body);
-      if (result.status == ResultTypeEnum.success.value) {
+      if (result.response.statusCode == 200) {
         return Right(result);
       } else {
-        final errorMessage = result.message;
+        final errorMessage = result.response.data['detail'] as String;
         final exceptionHandler = ExceptionHandler(
           messageException: errorMessage,
         );
@@ -66,7 +62,7 @@ class AuthRepositoryImpl extends AuthRepository {
   }
 
   @override
-  Future<Either<ExceptionHandler, ApiResponse<AuthResponse>>> register({
+  Future<Either<ExceptionHandler, HttpResponse<AuthResponse>>> register({
     required String firstName,
     required String lastName,
     required String email,
@@ -84,13 +80,11 @@ class AuthRepositoryImpl extends AuthRepository {
         'activation_token': activationToken,
       };
       final result = await _apiService.register(body);
-      if (result.status == ResultTypeEnum.success.value) {
-        if (result.data?.noteModels?.isNotEmpty ?? false) {
-          await _databaseHelper.insertAllNotes(result.data?.noteModels ?? []);
-        }
+      if (result.response.statusCode == 200) {
+
         return Right(result);
       } else {
-        final errorMessage = result.message;
+        final errorMessage = result.response.data['detail'] as String;
         final exceptionHandler = ExceptionHandler(
           messageException: errorMessage,
         );
@@ -102,17 +96,17 @@ class AuthRepositoryImpl extends AuthRepository {
   }
 
   @override
-  Future<Either<ExceptionHandler, ApiResponse<dynamic>>>
+  Future<Either<ExceptionHandler, HttpResponse<ResetPasswordResponse>>>
       sendResetPasswordEmail({
     required String email,
   }) async {
     try {
       final body = {'email': email};
       final result = await _apiService.sendResetPasswordEmail(body);
-      if (result.status == ResultTypeEnum.success.value) {
+      if (result.response.statusCode == 200) {
         return Right(result);
       } else {
-        final errorMessage = result.message;
+        final errorMessage = result.response.data['detail'] as String;
         final exceptionHandler = ExceptionHandler(
           messageException: errorMessage,
         );
@@ -124,7 +118,7 @@ class AuthRepositoryImpl extends AuthRepository {
   }
 
   @override
-  Future<Either<ExceptionHandler, ApiResponse<dynamic>>> resetPassword({
+  Future<Either<ExceptionHandler, HttpResponse<MessageResponse>>> resetPassword({
     required String email,
     required String resetToken,
     required String password,
@@ -138,10 +132,10 @@ class AuthRepositoryImpl extends AuthRepository {
         'password_confirmation': passwordConfirmation,
       };
       final result = await _apiService.resetPassword(body);
-      if (result.status == ResultTypeEnum.success.value) {
+      if (result.response.statusCode == 200) {
         return Right(result);
       } else {
-        final errorMessage = result.message;
+        final errorMessage = result.response.data['detail'] as String;
         final exceptionHandler = ExceptionHandler(
           messageException: errorMessage,
         );

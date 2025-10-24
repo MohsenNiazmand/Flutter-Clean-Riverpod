@@ -16,7 +16,7 @@ class ExceptionHandler {
       PrimaryToast.show(message);
     } else if (responseData != null) {
       // Extract error message from backend response
-      String message = responseData['message'] as String? ?? 'Unknown error';
+      String message = _extractErrorMessage(responseData);
       PrimaryToast.show(message);
     } else if (responseData == null) {
       PrimaryToast.show('Connection Failed, Try again later!');
@@ -33,6 +33,50 @@ class ExceptionHandler {
   }
   final DioException? dioException;
   final String? messageException;
+
+  /// Extract error message from various backend response formats
+  String _extractErrorMessage(dynamic responseData) {
+    if (responseData == null) return 'Unknown error';
+    
+    // Handle Django REST Framework error formats
+    if (responseData is Map<String, dynamic>) {
+      // Check for 'detail' field (common in DRF)
+      if (responseData.containsKey('detail')) {
+        final detail = responseData['detail'];
+        if (detail is String) return detail;
+        if (detail is List && detail.isNotEmpty) {
+          return detail.first.toString();
+        }
+      }
+      
+      // Check for 'non_field_errors' (DRF validation errors)
+      if (responseData.containsKey('non_field_errors')) {
+        final errors = responseData['non_field_errors'];
+        if (errors is List && errors.isNotEmpty) {
+          return errors.first.toString();
+        }
+      }
+      
+      // Check for field-specific errors (e.g., 'title': ['error message'])
+      for (final entry in responseData.entries) {
+        if (entry.value is List && (entry.value as List).isNotEmpty) {
+          return '${entry.key}: ${(entry.value as List).first}';
+        }
+      }
+      
+      // Check for 'message' field
+      if (responseData.containsKey('message')) {
+        return responseData['message'].toString();
+      }
+      
+      // Check for 'error' field
+      if (responseData.containsKey('error')) {
+        return responseData['error'].toString();
+      }
+    }
+    
+    return 'Unknown error';
+  }
 
   String? get message =>
       messageException ??

@@ -1,11 +1,17 @@
 class ActivationTokenResponse {
   ActivationTokenResponse({
     this.code,
+    this.message,
   });
 
   ActivationTokenResponse.fromJson(Map<String, dynamic> json)
-      : code = json['code'] as String?;
+      : code = json['activation_code'] as String?,
+        message = json['message'] as String?;
   final String? code;
+  final String? message;
 
-  Map<String, dynamic> toJson() => {'code': code};
+  Map<String, dynamic> toJson() => {
+        'activation_code': code,
+        'message': message,
+      };
 }

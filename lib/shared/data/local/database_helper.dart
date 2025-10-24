@@ -24,23 +24,26 @@ class DatabaseHelper {
     return nextId;
   }
 
-  Future<void> insertNote({
+  Future<NoteModel> insertNote({
     required String title,
     required String body,
+    NoteModel? noteModel
   }) async {
     try {
       final box = await noteBox;
       final nextId = await _getNextId();
 
-      final newNote = NoteModel(
+      final newNote =noteModel ?? NoteModel(
         id: nextId,
         title: title,
-        body: body,
+        content: body,
       );
 
       await box.put(nextId, newNote);
+      return newNote;
     } catch (e) {
       LoggerHelper.errorLog(e);
+      return NoteModel();
     }
   }
 

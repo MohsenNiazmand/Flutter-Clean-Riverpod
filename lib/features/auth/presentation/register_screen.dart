@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_clean_riverpod/config/l10n/app_localization_helper.dart';
 import 'package:flutter_clean_riverpod/config/routes/routes.dart';
 import 'package:flutter_clean_riverpod/config/theme/app_styles.dart';
@@ -10,7 +11,6 @@ import 'package:flutter_clean_riverpod/core/utils/form_validators.dart';
 import 'package:flutter_clean_riverpod/domain/entities/data_state.dart';
 import 'package:flutter_clean_riverpod/features/auth/data/models/activation_code_response.dart';
 import 'package:flutter_clean_riverpod/features/auth/presentation/provider/auth_provider.dart';
-import 'package:flutter_clean_riverpod/shared/data/model/api_response.dart';
 import 'package:flutter_clean_riverpod/shared/domain/enums/enums.dart';
 import 'package:flutter_clean_riverpod/shared/presentation/captcha/captcha_widget.dart';
 import 'package:flutter_clean_riverpod/shared/presentation/global_keys.dart';
@@ -21,12 +21,12 @@ import 'package:flutter_clean_riverpod/shared/presentation/widgets/primary_gap.d
 import 'package:flutter_clean_riverpod/shared/presentation/widgets/primary_rectangle.dart';
 import 'package:flutter_clean_riverpod/shared/presentation/widgets/primary_textfield.dart';
 import 'package:flutter_clean_riverpod/shared/presentation/widgets/primary_toast.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:retrofit/dio.dart';
 
 class RegisterScreen extends HookConsumerWidget {
   const RegisterScreen({super.key});
@@ -41,8 +41,8 @@ class RegisterScreen extends HookConsumerWidget {
     final acceptTerms = ref.watch(acceptTermsProvider);
     final isCaptchaValidate = useState(false);
 
-    final loading = useState(false);
-
+    final loading =
+        ref.watch(registerProvider).stateChecker == StateCheckerEnum.loading;
 
     Future<void> register() async {
       final firstName = GlobalKeys.registerFormKey.currentState
@@ -83,37 +83,26 @@ class RegisterScreen extends HookConsumerWidget {
           ref.read(emailRProvider.notifier).state = email;
           ref.read(passwordRProvider.notifier).state = password;
 
-
-          //In reality we use this, but now we simulate real process
-          // unawaited(
-          //   ref
-          //       .read(sendActivationTokenProvider.notifier)
-          //       .sendActivationToken(),
-          // );
-          loading.value=true;
-          Future.delayed(Durations.extralong4,(){
-            loading.value=false;
-            if(context.mounted) {
-              context.push(Routes.emailConfirmation);
-            }
-
-          });
-
+          unawaited(
+            ref
+                .read(sendActivationTokenProvider.notifier)
+                .sendActivationToken(),
+          );
         }
       }
     }
 
-    // ref.listen<DataState<ApiResponse<ActivationTokenResponse?>>>(
-    //   sendActivationTokenProvider,
-    //       (previous, current) {
-    //     if (current is DataSuccess) {
-    //       context.push(Routes.emailConfirmation);
-    //     }
-    //   },
-    // );
+    ref.listen<DataState<HttpResponse<ActivationTokenResponse?>>>(
+      sendActivationTokenProvider,
+      (previous, current) {
+        if (current is DataSuccess) {
+          context.push(Routes.emailConfirmation);
+        }
+      },
+    );
 
     return CustomPage(
-      loading: loading.value,
+      loading: loading,
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: dimen32),
@@ -144,6 +133,7 @@ class RegisterScreen extends HookConsumerWidget {
                       ),
                       Gap.v24(),
                       Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Expanded(
                             child: PrimaryTextField(

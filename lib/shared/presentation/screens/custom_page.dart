@@ -79,12 +79,12 @@ class CustomPage extends HookConsumerWidget {
                 onTap: () {
                   if (isLoggedIn.value) {
                     getIt<SecureStorage>()
-                        .set(currentLocationWeb, Routes.home);
+                        .set(currentLocationWeb, Routes.notes);
                     ref.read(currentLocationProvider.notifier).state =
-                        Routes.home;
-                    context.go(Routes.home);
+                        Routes.notes;
+                    context.go(Routes.notes);
                   } else {
-                    context.go(Routes.home);
+                    context.go(Routes.notes);
                   }
                 },
                 child: Padding(
