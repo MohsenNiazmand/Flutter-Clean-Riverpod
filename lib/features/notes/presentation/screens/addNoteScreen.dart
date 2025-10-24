@@ -113,24 +113,26 @@ class AddNoteScreen extends HookConsumerWidget {
                     ),
                   ),
                   Gap.v12(),
-                  PrimaryButton(
-                    width: double.infinity,
-                    onPress: () {
-
-                      if (selectedNote == null) {
-                        ref.read(createNoteProvider.notifier).createNote(
-                              title: titleController.text,
-                              content: descriptionController.text,
-                            );
-                      } else {
-                        ref.read(updateNoteProvider.notifier).updateNote(
-                              id: selectedNote.id ?? 0,
-                              title: titleController.text,
-                              content: descriptionController.text,
-                            );
-                      }
-                    },
-                    text: context.tr.save,
+                  PrimaryMaxWidth(
+                    child: PrimaryButton(
+                      width: double.infinity,
+                      onPress: () {
+                    
+                        if (selectedNote == null) {
+                          ref.read(createNoteProvider.notifier).createNote(
+                                title: titleController.text,
+                                content: descriptionController.text,
+                              );
+                        } else {
+                          ref.read(updateNoteProvider.notifier).updateNote(
+                                id: selectedNote.id ?? 0,
+                                title: titleController.text,
+                                content: descriptionController.text,
+                              );
+                        }
+                      },
+                      text:selectedNote == null ? context.tr.save : context.tr.update,
+                    ),
                   ),
                 ],
               ),

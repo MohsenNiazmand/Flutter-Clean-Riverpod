@@ -25,7 +25,6 @@ class AuthRepositoryImpl extends AuthRepository {
       final body = {'email': email, 'password': password};
       final result = await _apiService.login(body);
       if (result.response.statusCode == 200) {
-
         return Right(result);
       } else {
         final errorMessage = result.response.data['detail'] as String;
@@ -80,8 +79,8 @@ class AuthRepositoryImpl extends AuthRepository {
         'activation_token': activationToken,
       };
       final result = await _apiService.register(body);
-      if (result.response.statusCode == 200) {
-
+      if (result.response.statusCode == 200 ||
+          result.response.statusCode == 201) {
         return Right(result);
       } else {
         final errorMessage = result.response.data['detail'] as String;
@@ -118,7 +117,8 @@ class AuthRepositoryImpl extends AuthRepository {
   }
 
   @override
-  Future<Either<ExceptionHandler, HttpResponse<MessageResponse>>> resetPassword({
+  Future<Either<ExceptionHandler, HttpResponse<MessageResponse>>>
+      resetPassword({
     required String email,
     required String resetToken,
     required String password,

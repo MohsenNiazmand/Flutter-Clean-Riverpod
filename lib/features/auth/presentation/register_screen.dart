@@ -41,8 +41,8 @@ class RegisterScreen extends HookConsumerWidget {
     final acceptTerms = ref.watch(acceptTermsProvider);
     final isCaptchaValidate = useState(false);
 
-    final loading =
-        ref.watch(registerProvider).stateChecker == StateCheckerEnum.loading;
+    final loading = ref.watch(sendActivationTokenProvider).stateChecker ==
+        StateCheckerEnum.loading;
 
     Future<void> register() async {
       final firstName = GlobalKeys.registerFormKey.currentState

@@ -203,4 +203,7 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get passwordResetCodeSentPleaseCheckYourEmail =>
       'Password reset code sent. Please check your email.';
+
+  @override
+  String get update => 'Update';
 }

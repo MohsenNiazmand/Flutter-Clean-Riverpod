@@ -79,6 +79,7 @@
   "cancel": "Cancel",
   "delete": "Delete",
   "passwordChangeSuccessfully": "Password changed successfully.",
-  "passwordResetCodeSentPleaseCheckYourEmail": "Password reset code sent. Please check your email."
+  "passwordResetCodeSentPleaseCheckYourEmail": "Password reset code sent. Please check your email.",
+  "update":"Update"
 
 }
